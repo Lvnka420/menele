@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>menele.eu</title>
+
+ 
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">menele.eu<span class="cursor">_</span></a>
+  <nav>
+    <a href="#streamerzy">Streamerzy</a>
+    <a href="#harmonogram">Harmonogram</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span>SIEMANO POLSKO</span>
+    <span>CO TAM SŁYCHAĆ NA SCENIE</span>
+    <span>Z TEJ STRONY TETKA</span>
+    <span>REPREZENTUJE PODZIEMIE</span>
+    <span>NIE PISZĄ O MNIE ŚMIECIE</span>
+    <span>I NIECH TAK POZOSTANIE</span>
+    <span>SIEMANO POLSKO</span>
+    <span>CO TAM SŁYCHAĆ NA SCENIE</span>
+    <span>Z TEJ STRONY TETKA</span>
+    <span>REPREZENTUJE PODZIEMIE</span>
+    <span>NIE PISZĄ O MNIE ŚMIECIE</span>
+    <span>I NIECH TAK POZOSTANIE</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero" id="kontakt">
+    <p class="hero-label">Co to w ogóle te całe menele?</p>
+    <h1>Grupa meneli<br><em>streamujących</em><br>na żywo.</h1>
+    <p>Gierki, gotowanie, IRL i inne cuda — wszystko na żywo.
+    <div class="stats-row">
+      <div class="stat">
+        <span class="stat-value">271K</span>
+        <span class="stat-label">Użytkowników</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">100%</span>
+        <span class="stat-label">Czystości rasowej</span>
+      </div>
+      <div class="stat">
+        <span class="stat-value">−∞</span>
+        <span class="stat-label">Możliwości</span>
+      </div>
+    </div>
+
+    <div class="hero-links">
+      <a href="https://discord.gg/DKavbGKuNk">discord</a>
+      <a href="https://www.instagram.com/tvp.menele">instagram</a>
+      <a href="https://kick.com/tvpmenele">kick.com/menele</a>
+    </div>
+  </div>
+
+  <!-- STREAMERZY -->
+  <section id="streamerzy">
+    <div class="section-header">
+      <span class="section-title">Streamerzy</span>
+      <span class="section-meta">aktywni / nieaktywni</span>
+    </div>
+    <table class="list-table">
+      <tbody>
+        <tr class="fade-row">
+          <td class="col-id">MNL-001</td>
+          <td class="col-main"><a href="#">Lvnka<span class="badge live">live</span></a></td>
+          <td class="col-right"><span class="tag">gierki</span></td>
+        </tr>
+        <tr class="fade-row">
+          <td class="col-id">MNL-002</td>
+          <td class="col-main"><a href="#">Lodzik</a></td>
+          <td class="col-right"><span class="tag">gotowanie</span></td>
+        </tr>
+        <tr class="fade-row">
+          <td class="col-id">MNL-003</td>
+          <td class="col-main"><a href="#">Profesjonalny krytyk etniczny</a></td>
+          <td class="col-right"><span class="tag">irl</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- HARMONOGRAM -->
+  <section id="harmonogram">
+    <div class="section-header">
+      <span class="section-title">Harmonogram</span>
+      <span class="section-meta">pon — niedz</span>
+    </div>
+    <table class="list-table">
+      <tbody>
+        <tr class="fade-row">
+          
+      </tbody>
+    </table>
+  </section>
+
+  <!-- SOCIALS -->
+  <section>
+    <div class="section-header">
+      <span class="section-title">Znajdź nas wszędzie</span>
+    </div>
+    <table class="list-table">
+      <tbody>
+        
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>© menele.eu — SIEMANO POLSKO</p>
+  <p>tvp-menele // PL</p>
+</footer>
+
+<script>
+  // Staggered scroll reveal
+  const rows = document.querySelectorAll('.fade-row');
+
+  const observer = new IntersectionObserver((entries) => {
+    const entering = entries
+      .filter(e => e.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+    entering.forEach((entry, i) => {
+      setTimeout(() => entry.target.classList.add('visible'), i * 55);
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.01, rootMargin: '0px 0px -10px 0px' });
+
+  rows.forEach(row => observer.observe(row));
+</script>
+
+</body>
+</html>
