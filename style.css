@@ -1,19 +1,19 @@
- @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
-
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+ 
   :root {
-    --bg: #f0ede6;
-    --fg: #0d0d0d;
-    --muted: #888;
-    --line: #0d0d0d;
-    --hover-bg: #0d0d0d;
-    --hover-fg: #f0ede6;
+    --bg: #0d0d0d;
+    --fg: #e8e4dc;
+    --muted: #555;
+    --line: #2a2a2a;
+    --hover-bg: #e8e4dc;
+    --hover-fg: #0d0d0d;
     --live: #e03030;
   }
-
+ 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   html { font-size: 14px; scroll-behavior: smooth; }
-
+ 
   body {
     background: var(--bg);
     color: var(--fg);
@@ -22,7 +22,7 @@
     min-height: 100vh;
     cursor: crosshair;
   }
-
+ 
   /* ── HEADER ── */
   header {
     border-bottom: 2px solid var(--line);
@@ -35,7 +35,7 @@
     background: var(--bg);
     z-index: 100;
   }
-
+ 
   .logo {
     font-family: 'Space Mono', monospace;
     font-size: 1.4rem;
@@ -44,16 +44,16 @@
     text-decoration: none;
     color: var(--fg);
   }
-
+ 
   .logo .cursor {
     display: inline-block;
     animation: blink 1s step-end infinite;
   }
-
+ 
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
-
+ 
   nav { display: flex; gap: 2rem; }
-
+ 
   nav a {
     font-size: 0.7rem;
     letter-spacing: 0.14em;
@@ -63,7 +63,7 @@
     transition: color 0.1s;
   }
   nav a:hover { color: var(--fg); }
-
+ 
   /* ── MARQUEE ── */
   .marquee-wrap {
     overflow: hidden;
@@ -91,14 +91,14 @@
   }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
   @keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-
+ 
   /* ── MAIN ── */
   main {
     max-width: 860px;
     margin: 0 auto;
     padding: 0 3rem;
   }
-
+ 
   /* ── HERO ── */
   .hero {
     padding: 5rem 0 4rem;
@@ -130,7 +130,7 @@
     max-width: 460px;
     margin-bottom: 2.5rem;
   }
-
+ 
   .stats-row {
     display: flex;
     gap: 3rem;
@@ -154,7 +154,7 @@
     text-transform: uppercase;
     color: var(--muted);
   }
-
+ 
   .hero-links { display: flex; flex-direction: column; gap: 0.35rem; }
   .hero-links a {
     font-size: 0.8rem;
@@ -167,7 +167,7 @@
   }
   .hero-links a::before { content: '→'; color: var(--muted); }
   .hero-links a:hover { gap: 1.2rem; }
-
+ 
   /* ── SECTIONS ── */
   section {
     padding: 3rem 0;
@@ -190,14 +190,14 @@
     color: var(--muted);
     letter-spacing: 0.06em;
   }
-
+ 
   /* ── TABLE ── */
   .list-table {
     width: 100%;
     border-collapse: collapse;
   }
   .list-table tr {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #222;
     transition: background 0.07s;
     cursor: pointer;
   }
@@ -206,7 +206,7 @@
   .list-table tr:hover a,
   .list-table tr:hover .badge,
   .list-table tr:hover .tag { color: var(--hover-fg) !important; border-color: var(--hover-fg) !important; }
-
+ 
   .list-table td {
     padding: 0.58rem 0;
     font-size: 0.82rem;
@@ -231,7 +231,7 @@
     color: var(--fg);
     text-decoration: none;
   }
-
+ 
   /* live badge */
   .badge {
     font-size: 0.55rem;
@@ -249,25 +249,25 @@
     content: '● ';
     animation: pulse 1s ease-in-out infinite;
   }
-
+ 
   /* platform tag */
   .tag {
     font-size: 0.6rem;
     letter-spacing: 0.08em;
     color: var(--muted);
-    border: 1px solid #ccc;
+    border: 1px solid #333;
     padding: 0.1em 0.5em;
     display: inline-block;
     line-height: 1.6;
   }
-
+ 
   /* schedule time */
   .time-col {
     font-size: 0.72rem;
     color: var(--muted);
     white-space: nowrap;
   }
-
+ 
   /* ── SCROLL REVEAL ── */
   .fade-row {
     opacity: 0;
@@ -279,7 +279,7 @@
     opacity: 1;
     transform: translateY(0);
   }
-
+ 
   /* ── FOOTER ── */
   footer {
     padding: 2rem 3rem;
@@ -290,7 +290,7 @@
     margin-top: 1rem;
   }
   footer p { font-size: 0.62rem; color: var(--muted); letter-spacing: 0.1em; }
-
+ 
   /* ── MOBILE ── */
   @media (max-width: 640px) {
     header { padding: 1.2rem 1.5rem; flex-direction: column; gap: 0.8rem; }
