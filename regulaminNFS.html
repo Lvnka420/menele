@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFS TURNIEJ — ZSE2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap');
+
+  :root {
+    --bg: #0a0a0a;
+    --fg: #e8e3d8;
+    --muted: #444;
+    --border: #1e1e1e;
+    --accent: #ff3c00;
+    --accent2: #ffd200;
+    --hover-bg: #e8e3d8;
+    --hover-fg: #0a0a0a;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 14px; scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'IBM Plex Mono', monospace;
+    line-height: 1.6;
+    cursor: crosshair;
+  }
+
+  /* ── SCANLINES TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ── HEADER ── */
+  header {
+    border-bottom: 2px solid var(--border);
+    padding: 1.6rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .logo strong { color: var(--fg); }
+
+  nav { display: flex; gap: 2rem; align-items: baseline; }
+  nav a {
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    transition: color 0.1s;
+  }
+  nav a:hover { color: var(--fg); }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    overflow: hidden;
+    border-bottom: 2px solid var(--border);
+    background: var(--accent);
+    padding: 0.45rem 0;
+  }
+  .marquee-track {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: scroll 20s linear infinite;
+  }
+  .marquee-track span {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #000;
+    font-weight: 700;
+    padding: 0 2rem;
+  }
+  .marquee-track span::after { content: ' //'; opacity: 0.5; margin-left: 2rem; }
+  @keyframes scroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 3rem;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 4rem 0 3.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .hero-label::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--accent);
+    animation: pulse 1s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 8rem);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.2rem;
+    color: var(--fg);
+  }
+
+  .hero h1 .outline {
+    -webkit-text-stroke: 1.5px var(--fg);
+    color: transparent;
+  }
+
+  .hero h1 .red { color: var(--accent); }
+
+  .hero-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 0.2rem; }
+  .meta-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 0.05em;
+    line-height: 1;
+  }
+  .meta-val.accent { color: var(--accent); }
+  .meta-val.yellow { color: var(--accent2); }
+  .meta-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    padding: 2.8rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.4rem;
+  }
+  .section-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .section-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    color: var(--border);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── TABLE ── */
+  .list-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .list-table tr {
+    border-top: 1px solid var(--border);
+    transition: background 0.07s;
+    cursor: default;
+  }
+  .list-table tr:hover { background: var(--hover-bg); }
+  .list-table tr:hover td { color: var(--hover-fg) !important; }
+  .list-table tr:hover .num { color: var(--hover-fg) !important; }
+  .list-table tr:hover .tag-pill { border-color: var(--hover-fg) !important; color: var(--hover-fg) !important; }
+  .list-table tr:hover .ok { background: var(--hover-fg); color: var(--hover-bg); }
+  .list-table tr:hover .no { background: var(--hover-fg); color: var(--hover-bg); }
+
+  .list-table td {
+    padding: 0.6rem 0;
+    font-size: 0.82rem;
+    vertical-align: middle;
+    transition: color 0.07s;
+    color: var(--fg);
+  }
+
+  .list-table td.num {
+    color: var(--muted);
+    width: 40px;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    padding-right: 1rem;
+    vertical-align: top;
+    padding-top: 0.7rem;
+  }
+
+  .list-table td.right {
+    text-align: right;
+    padding-left: 1rem;
+    white-space: nowrap;
+  }
+
+  /* tags */
+  .tag-pill {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--muted);
+    color: var(--muted);
+    padding: 0.15em 0.55em;
+    display: inline-block;
+    line-height: 1.7;
+    transition: all 0.07s;
+  }
+  .ok {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+    font-weight: 700;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    padding: 0.15em 0.55em;
+    display: inline-block;
+    line-height: 1.7;
+  }
+  .no {
+    background: var(--border);
+    color: var(--muted);
+    border-color: var(--border);
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    padding: 0.15em 0.55em;
+    display: inline-block;
+    line-height: 1.7;
+    text-transform: uppercase;
+  }
+
+  /* ── NAGRODY BOX ── */
+  .prizes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--border);
+    margin-top: 0;
+  }
+  .prize {
+    padding: 1.5rem 1.2rem;
+    border-right: 1px solid var(--border);
+    transition: background 0.08s;
+  }
+  .prize:last-child { border-right: none; }
+  .prize:hover { background: var(--hover-bg); }
+  .prize:hover .prize-place,
+  .prize:hover .prize-desc { color: var(--hover-fg) !important; }
+  .prize:hover .prize-val { color: var(--hover-fg) !important; }
+
+  .prize-place {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .prize-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+    transition: color 0.08s;
+  }
+  .prize-val.gold { color: var(--accent2); }
+  .prize-val.silver { color: #aaa; }
+  .prize-val.bronze { color: #c87533; }
+  .prize-desc {
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.5;
+    transition: color 0.08s;
+  }
+
+  /* ── HARMONOGRAM TIMELINE ── */
+  .timeline { display: flex; flex-direction: column; }
+  .tl-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 0.55rem 0;
+    border-top: 1px solid var(--border);
+    transition: background 0.07s;
+  }
+  .tl-row:hover { background: var(--hover-bg); }
+  .tl-row:hover .tl-time,
+  .tl-row:hover .tl-title,
+  .tl-row:hover .tl-note { color: var(--hover-fg) !important; }
+  .tl-time {
+    font-size: 0.68rem;
+    color: var(--accent);
+    width: 55px;
+    flex-shrink: 0;
+    transition: color 0.07s;
+  }
+  .tl-row:hover .tl-time { color: var(--hover-fg) !important; }
+  .tl-title {
+    font-size: 0.82rem;
+    color: var(--fg);
+    flex: 1;
+    transition: color 0.07s;
+  }
+  .tl-note {
+    font-size: 0.65rem;
+    color: var(--muted);
+    transition: color 0.07s;
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .fade-row {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.44s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .fade-row.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid var(--border);
+  }
+  footer p { font-size: 0.6rem; color: var(--muted); letter-spacing: 0.1em; }
+  footer span { color: var(--accent); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    header { padding: 1.2rem 1.5rem; flex-direction: column; gap: 0.8rem; }
+    main { padding: 0 1.5rem; }
+    footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; }
+    .prizes { grid-template-columns: 1fr; }
+    .prize { border-right: none; border-bottom: 1px solid var(--border); }
+    nav { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#"><strong>ZSE2</strong> // Turnieje</a>
+  <nav>
+    <a href="#regulamin">Regulamin</a>
+    <a href="#harmonogram">Harmonogram</a>
+    <a href="#nagrody">Nagrody</a>
+    <a href="#zapis">Zapis</a>
+  </nav>
+</header>
+
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span>Turniej Need For Speed</span>
+    <span>ZSE nr 2 w Poznaniu</span>
+    <span>Zapisy do 31.05.2025</span>
+    <span>Wejście wolne</span>
+    <span>Turniej Need For Speed</span>
+    <span>ZSE nr 2 w Poznaniu</span>
+    <span>Zapisy do 31.05.2025</span>
+    <span>Wejście wolne</span>
+  </div>
+</div>
+
+<main>
+
+  <!-- HERO -->
+  <div class="hero">
+    <p class="hero-label">Oficjalny regulamin turnieju</p>
+    <h1>
+      <span class="outline">NEED</span><br>
+      <span class="red">FOR</span><br>
+      SPEED
+    </h1>
+    <p class="hero-sub">Zespół Szkół Elektrycznych nr 2 w Poznaniu</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-val accent">16</span>
+        <span class="meta-label">Uczestników max.</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-val yellow">1v1</span>
+        <span class="meta-label">Format</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-val">ZSE2</span>
+        <span class="meta-label">Lokalizacja</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-val">TBD</span>
+        <span class="meta-label">Data</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGULAMIN OGÓLNY -->
+  <section id="regulamin">
+    <div class="section-header">
+      <span class="section-title">§1 — Postanowienia ogólne</span>
+      <span class="section-num">01</span>
+    </div>
+    <table class="list-table">
+      <tbody>
+        <tr class="fade-row"><td class="num">1.1</td><td>Turniej organizowany jest przez uczniów ZSE nr 2 w Poznaniu.</td></tr>
+        <tr class="fade-row"><td class="num">1.2</td><td>Udział w turnieju jest bezpłatny i otwarty dla uczniów szkoły.</td></tr>
+        <tr class="fade-row"><td class="num">1.3</td><td>Przystąpienie do turnieju oznacza akceptację niniejszego regulaminu.</td></tr>
+        <tr class="fade-row"><td class="num">1.4</td><td>Organizatorzy zastrzegają sobie prawo do zmian w regulaminie z wyprzedzeniem 24h.</td></tr>
+        <tr class="fade-row"><td class="num">1.5</td><td>Decyzje sędziego są ostateczne i niepodważalne.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- UCZESTNICY -->
+  <section>
+    <div class="section-header">
+      <span class="section-title">§2 — Uczestnicy</span>
+      <span class="section-num">02</span>
+    </div>
+    <table class="list-table">
+      <tbody>
+        <tr class="fade-row"><td class="num">2.1</td><td>W turnieju mogą brać udział wyłącznie uczniowie ZSE nr 2.</td></tr>
+        <tr class="fade-row"><td class="num">2.2</td><td>Maksymalna liczba uczestników wynosi <strong>16 osób</strong> (drabinka eliminacyjna).</td></tr>
+        <tr class="fade-row"><td class="num">2.3</td><td>Zapisy przyjmowane są do wyczerpania miejsc lub do terminu podanego przez organizatorów.</td></tr>
+        <tr class="fade-row"><td class="num">2.4</td><td>Uczestnik może wystawić tylko jedną osobę — zakaz wielokrotnego rejestrowania.</td></tr>
+        <tr class="fade-row"><td class="num">2.5</td><td>Niestawienie się w ciągu 5 minut od wywołania = walkower dla przeciwnika.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- FORMAT -->
+  <section>
+    <div class="section-header">
+      <span class="section-title">§3 — Format rozgrywek</span>
+      <span class="section-num">03</span>
+    </div>
+    <table class="list-table">
+      <tbody>
+        <tr class="fade-row"><td class="num">3.1</td><td>Format: drabinka single-elimination (przegrywający odpada).</td></tr>
+        <tr class="fade-row"><td class="num">3.2</td><td>Każde starcie to wyścig 1v1 na ustalonym torze — <strong>best of 3</strong> (2 wygrane).</td></tr>
+        <tr class="fade-row"><td class="num">3.3</td><td>Tor i warunki pogodowe ustalają organizatorzy przed każdą rundą — brak możliwości zmiany.</td></tr>
+        <tr class="fade-row"><td class="num">3.4</td><td>Samochód przydzielany losowo z puli organizatorów — obaj gracze dostają ten sam model.</td></tr>
+        <tr class="fade-row"><td class="num">3.5</td><td>Finał rozgrywany w formacie <strong>best of 5</strong> (3 wygrane).</td></tr>
+        <tr class="fade-row"><td class="num">3.6</td><td>W przypadku remisu (techniczny błąd gry) — runda zostaje powtórzona.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ZASADY GRY -->
+  <section>
+    <div class="section-header">
+      <span class="section-title">§4 — Zasady podczas gry</span>
+      <span class="section-num">04</span>
+    </div>
+    <table class="list-table">
+      <tbody>
+        <tr class="fade-row">
+          <td class="num">4.1</td>
+          <td>Używanie cheatów / modyfikacji gry.</td>
+          <td class="right"><span class="no">Zakaz</span></td>
+        </tr>
+        <tr class="fade-row">
+          <td class="num">4.2</td>
+          <td>Celowe crashowanie przeciwnika (ramming).</td>
+          <td class="right"><span class="no">Zakaz</span></td>
+        </tr>
+        <tr class="fade-row">
+          <td class="num">4.3</td>
+          <td>Używanie ustawień domyślnych (brak własnych bindów).</td>
+          <td class="right"><span class="ok">Wymagane</span></td>
+        </tr>
+        <tr class="fade-row">
+          <td class="num">4.4</td>
+          <td>Kierownica / pad / klawiatura — dowolny kontroler.</td>
+          <td class="right"><span class="ok">Dozwolone</span></td>
+        </tr>
+        <tr class="fade-row">
+          <td class="num">4.5</td>
+          <td>Celowe restartowanie meczu bez zgody sędziego.</td>
+          <td class="right"><span class="no">Zakaz</span></td>
+        </tr>
+        <tr class="fade-row">
+          <td class="num">4.6</td>
+          <td>Wulgarne zachowanie / obrażanie przeciwnika.</td>
+          <td class="right"><span class="no">Dyskwalifikacja</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- NAGRODY -->
+  <section id="nagrody">
+    <div class="section-header">
+      <span class="section-title">§5 — Nagrody</span>
+      <span class="section-num">05</span>
+    </div>
+    <div class="prizes">
+      <div class="prize fade-row">
+        <p class="prize-place">I miejsce</p>
+        <p class="prize-val gold">🏆 1.</p>
+        <p class="prize-desc">Nagroda główna<br>+ dyplom + wieczna chwała</p>
+      </div>
+      <div class="prize fade-row">
+        <p class="prize-place">II miejsce</p>
+        <p class="prize-val silver">🥈 2.</p>
+        <p class="prize-desc">Nagroda rzeczowa<br>+ dyplom</p>
+      </div>
+      <div class="prize fade-row">
+        <p class="prize-place">III miejsce</p>
+        <p class="prize-val bronze">🥉 3.</p>
+        <p class="prize-desc">Wyróżnienie<br>+ dyplom</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HARMONOGRAM -->
+  <section id="harmonogram">
+    <div class="section-header">
+      <span class="section-title">§6 — Harmonogram dnia</span>
+      <span class="section-num">06</span>
+    </div>
+    <div class="timeline">
+      <div class="tl-row fade-row">
+        <span class="tl-time">08:00</span>
+        <span class="tl-title">Rejestracja uczestników i losowanie drabinki</span>
+        <span class="tl-note">Sala TBD</span>
+      </div>
+      <div class="tl-row fade-row">
+        <span class="tl-time">08:30</span>
+        <span class="tl-title">Briefing — omówienie zasad i konfiguracja sprzętu</span>
+        <span class="tl-note">obowiązkowe</span>
+      </div>
+      <div class="tl-row fade-row">
+        <span class="tl-time">09:00</span>
+        <span class="tl-title">Faza grupowa — 1/8 finału</span>
+        <span class="tl-note">best of 3</span>
+      </div>
+      <div class="tl-row fade-row">
+        <span class="tl-time">10:30</span>
+        <span class="tl-title">Ćwierćfinały</span>
+        <span class="tl-note">best of 3</span>
+      </div>
+      <div class="tl-row fade-row">
+        <span class="tl-time">11:30</span>
+        <span class="tl-title">Półfinały</span>
+        <span class="tl-note">best of 3</span>
+      </div>
+      <div class="tl-row fade-row">
+        <span class="tl-time">12:30</span>
+        <span class="tl-title">Przerwa obiadowa</span>
+        <span class="tl-note">30 min</span>
+      </div>
+      <div class="tl-row fade-row">
+        <span class="tl-time">13:00</span>
+        <span class="tl-title">FINAŁ</span>
+        <span class="tl-note">best of 5</span>
+      </div>
+      <div class="tl-row fade-row">
+        <span class="tl-time">14:00</span>
+        <span class="tl-title">Dekoracja zwycięzców i rozdanie nagród</span>
+        <span class="tl-note">koniec</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ZAPIS -->
+  <section id="zapis">
+    <div class="section-header">
+      <span class="section-title">§7 — Zapisy i kontakt</span>
+      <span class="section-num">07</span>
+    </div>
+    <table class="list-table">
+      <tbody>
+        <tr class="fade-row"><td class="num">7.1</td><td>Zapisy przez formularz Google / listę w sekretariacie.</td></tr>
+        <tr class="fade-row"><td class="num">7.2</td><td>Termin zapisów: <strong>do odwołania lub wyczerpania miejsc.</strong></td></tr>
+        <tr class="fade-row"><td class="num">7.3</td><td>Kontakt z organizatorami: sala TBD lub przez organizatorów turnieju.</td></tr>
+        <tr class="fade-row"><td class="num">7.4</td><td>Organizatorzy zastrzegają sobie prawo do odwołania turnieju z przyczyn technicznych.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</main>
+
+<footer>
+  <p>ZSE nr 2 w Poznaniu — Turniej <span>Need For Speed</span></p>
+  <p>Regulamin v1.0 — 2025</p>
+</footer>
+
+<script>
+  const rows = document.querySelectorAll('.fade-row');
+  const observer = new IntersectionObserver((entries) => {
+    const entering = entries
+      .filter(e => e.isIntersecting)
+      .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    entering.forEach((entry, i) => {
+      setTimeout(() => entry.target.classList.add('visible'), i * 55);
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.01, rootMargin: '0px 0px -10px 0px' });
+  rows.forEach(row => observer.observe(row));
+</script>
+
+</body>
+</html>
