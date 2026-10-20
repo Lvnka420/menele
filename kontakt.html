@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kontakt — tvmenele</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📺</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="index.html">tv<span>menele</span></a>
+    <ul>
+      <li><a href="o-nas.html">O nas</a></li>
+      <li><a href="programy.html">Programy</a></li>
+      <li><a class="cur" href="kontakt.html">Kontakt</a></li>
+    </ul>
+    <a class="btn" href="kontakt.html">Współpraca</a>
+  </div>
+</header>
+<main>
+<div class="wrap pagehead"><div class="kicker">Kontakt</div><h1>Masz pomysł? Porozmawiajmy.</h1>
+<p class="lead">Współprace, gościnne występy, propozycje tematów: piszcie śmiało, odpowiadamy szybko.</p></div>
+<section><div class="wrap about">
+<div class="vals">
+<div class="card"><h3>Współpraca</h3><p>Projekty, sponsoring i wspólne produkcje. Napisz na kontakt@tvmenele.pl.</p></div>
+<div class="card"><h3>Gościnne występy</h3><p>Chcesz wystąpić w programie albo podsunąć temat? Daj znać.</p></div>
+<div class="card"><h3>Media</h3><p>Materiały prasowe i zapytania od redakcji wysyłamy na życzenie.</p></div>
+</div>
+<form id="f" class="f card"><input name="n" placeholder="Imię" required><input name="e" type="email" placeholder="Twój e-mail" required><textarea name="m" rows="5" placeholder="Wiadomość" required></textarea><button class="btn" type="submit">Wyślij wiadomość</button></form>
+</div></section>
+</main>
+<footer>
+  <div class="wrap">
+    <span>© 2026 tvmenele. Wszelkie prawa zastrzeżone.</span>
+    <span>Nadajemy z pasji.</span>
+  </div>
+</footer>
+<script>
+document.getElementById('f').addEventListener('submit',function(e){e.preventDefault();var d=new FormData(this);
+location.href='mailto:kontakt@tvmenele.pl?subject='+encodeURIComponent('Wiadomość ze strony od: '+d.get('n'))+'&body='+encodeURIComponent(d.get('m')+'\n\n'+d.get('e'))});
+</script>
+</body>
+</html>
